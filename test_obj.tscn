@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b22l1m1j3snjo"]
+
+[ext_resource type="Script" path="res://TestObject.cs" id="1_o8aml"]
+
+[node name="test_obj" type="TileMap"]
+format = 2
+script = ExtResource("1_o8aml")

@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bssbfc0y7rran"]
+
+[ext_resource type="Script" path="res://TestManager.cs" id="1_nwpmx"]
+[ext_resource type="Script" path="res://TestScene.cs" id="1_q5qik"]
+[ext_resource type="PackedScene" uid="uid://b22l1m1j3snjo" path="res://test_obj.tscn" id="3_luohn"]
+[ext_resource type="Script" path="res://TestData.cs" id="4_4ufgg"]
+
+[node name="test_scene" type="Node2D" node_paths=PackedStringArray("TestMgr", "ObjectData")]
+script = ExtResource("1_q5qik")
+TestMgr = NodePath("test_mgr")
+ObjectData = NodePath("test_data")
+
+[node name="test_mgr" type="Node" parent="."]
+script = ExtResource("1_nwpmx")
+ObjectPrefab = ExtResource("3_luohn")
+
+[node name="test_data" type="Node" parent="."]
+script = ExtResource("4_4ufgg")
