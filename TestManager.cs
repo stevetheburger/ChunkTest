@@ -13,7 +13,7 @@ namespace Test.Operations
 		[Export]
 		private TestData ObjectData;
 		
-		private Dictionary<int, TestObject> ActiveObjects;
+		private List<TestObject> ActiveObjects;
 		List<Int2D> ObjectSubs;
 		private Queue<TestObject> InactiveObjects;
 		
@@ -22,7 +22,7 @@ namespace Test.Operations
 		public override void _Ready()
 		{
 			base._Ready();
-			ActiveObjects = new Dictionary<int, TestObject>();
+			ActiveObjects = new List<TestObject>();
 			InactiveObjects = new Queue<TestObject>();
 			ObjectSubs = new List<Int2D>();
 		}
@@ -33,7 +33,6 @@ namespace Test.Operations
 
 			//Check resources. Ensure that there is enough.
 			TestObject obj;
-			int key;
 			int count = ObjectSubs.Count - ActiveObjects.Count;
 			int discrepancy = count - InactiveObjects.Count;
 
@@ -53,32 +52,35 @@ namespace Test.Operations
 				obj = InactiveObjects.Dequeue();
 				obj.Locate(loc);
 				
-				ActiveObjects.Add(loc.ToIndex(ObjectData.Size()), obj);
+				ActiveObjects.Add(obj);
 				AddChild(obj);
 				--count;
 			}
 
 			//Make unneeded objects dormant.
-			foreach(KeyValuePair<int, TestObject> obj_key_pair in ActiveObjects)
+			for(int i = 0; i < ActiveObjects.Count; ++i)
 			{
-				obj = obj_key_pair.Value;
-				key = obj_key_pair.Key;
+				obj = ActiveObjects[i];
 
 				//Check Time and recycle.
 				if(obj.Time() > _StaleTime)
 				{
-					GD.Print("Hibernating Object at: " + key);
-					ActiveObjects.Remove(key);
+					GD.Print("Hibernating Object at: " + i);
+					ActiveObjects.Remove(obj);
 					InactiveObjects.Enqueue(obj);
 					RemoveChild(obj);
 					continue;
 				}
 			}
 
-			foreach(KeyValuePair<int, TestObject> obj_key_pair in ActiveObjects)
+			for(int i = 0; i < ActiveObjects.Count; ++i)
 			{
+				obj = ActiveObjects[i];
+
+				GD.Print("Update object at: " + obj.Locate());
+
 				//Update Time.
-				obj_key_pair.Value.Time(delta);
+				obj.Time(delta);
 			}
 		}
 
